@@ -1,12 +1,7 @@
-#!/usr/bin/php
 <?php
 
-$ch = curl_init("http://www.example.com/");
+$url = "https://pub.orcid.org/v2.0/0000-0002-7353-1799";
 
-curl_setopt($ch, CURLOPT_FILE, $fp);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-
-curl_exec($ch);
-curl_close($ch);
-fclose($fp);
+$teste = file_get_contents($url);
+echo $teste;
 ?>
