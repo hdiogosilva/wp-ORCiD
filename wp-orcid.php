@@ -1,116 +1,140 @@
 <?php
-$orcidID = "0000-0002-7353-1799";
-$pubLimit = "10";
-//$orcidID = "0000-0002-1566-7006";
-//collectXML('0000-0002-0359-1147', 'email');
+// $orcidID = '0000-0002-7353-1799';
+// $pubLimit = '5';
 
-//fetch($orcidID, "nome", $pubLimit);
-//fetch($orcidID, "bio", $pubLimit);
-fetch($orcidID, "publica", $pubLimit);
+// fetch($orcidID, 'nome', $pubLimit);
+// fetch($orcidID, 'bio', $pubLimit);
+// fetch($orcidID, 'publica', $pubLimit);
 
 
 function fetch($orcidID, $elementID, $pubLimit) {
-	$url = 'https://pub.orcid.org/v2.0/' . $orcidID;
-
 		// Escolha de elementos
-	if ($elementID == "nome") {
-		$sliceProfile = 1;
-		$caminho ="/record:record/person:person/person:name";
-	} elseif ($elementID == "bio") {
-		$sliceProfile = 1;
-		$caminho = "/record:record/person:person/person:biography/personal-details:content";
-	} elseif ($elementID == "publica") {
-		$url = "https://pub.orcid.org/v2.0/" . $orcidID . "/works";
+	if ($elementID == 'publica') {
+		$url = 'https://pub.orcid.org/v2.0/' . $orcidID . '/works';
 		$sliceProfile = 2;
-		$caminho = "//activities:works/activities:group/work:work-summary";
-		//$caminho = "works.xml";
+	} else {
+		$url = 'https://pub.orcid.org/v2.0/' . $orcidID . '/person';
+		$sliceProfile = 1;
 	}
 
-	$curlXML = curl_init("$url");
-	curl_setopt($curlXML, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt($curlXML, CURLOPT_HEADER, false);
-	curl_setopt($curlXML, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($curlXML, CURLOPT_RETURNTRANSFER, TRUE);
-	$output = curl_exec($curlXML);
-	curl_close($curlXML);
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array ('Accept: application/json'));
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	$output = curl_exec($ch);
+	curl_close($ch);
 
-	$profile = new SimpleXMLElement($output);
+	$jsonInput = json_decode($output, true);
 
-	echo "<meta charset='UTF-8'>";
+	echo '<meta charset="UTF-8">';
 	if ($sliceProfile == 1) {
-		if ($elementID == "bio") {
-			$slice = $profile->xpath($caminho);
-			$resultado = implode("|", $slice);
-			echo "<h2>Biografia</h2><p>" . $resultado . "</p>";
-		} else {
-			$slice = $profile->xpath($caminho . "/personal-details:credit-name");
 
-			if (empty($slice)) {
-				$sliceFirst = $profile->xpath($caminho . "/personal-details:given-names");
-				$sliceSecond = $profile->xpath($caminho . "/personal-details:family-name");
-				$primeiroNome = implode("|", $sliceFirst);
-				$segundoNome = implode("|", $sliceSecond);
-				echo "<h1>Perfil de " . $primeiroNome . " " . $segundoNome . "</h1>";
+		// Nome
+		if ($elementID == 'nome'){
+			if (!is_null($jsonInput['name']['credit-name'])) {
+				echo '<h1>' . $jsonInput['name']['credit-name']['value'] . '</h1>';
 			} else {
-				$resultado = implode("|", $slice);
-				echo "<h1>Perfil de " . $resultado . "</h1>";
+				$nome1 = $jsonInput['name']['given-names']['value'];
+				$nome2 = $jsonInput['name']['family-name']['value'];
+				echo '<h1>' . $nome1 . ' ' . $nome2 . '</h1>';
 			}
 		}
+
+		// Biografia
+		if ($elementID == 'bio'){
+			echo '<h2>Biografia</h2>';
+			echo $jsonInput['biography']['content'];
+		}
+
 	} else {
-		echo "<h2>Publicações</h2>";
+		echo '<h2>Publicações</h2>';
+		$pubIDs = [];
 		$i = 0;
-		foreach ($profile->xpath($caminho) as $journalID) {
-			if (++$i == $pubLimit + 1) break;
-			$pubID = $journalID["put-code"];
-
-			// Array de elementos a mostrar para cada publicação
-			$publicaElementos = [
-				"Nome" => "./work:title/common:title",
-				"Data" => "./common:publication-date/common:year",
-				"Tipo" => "./work:type",
-			];
-
-			// Preencher as variáveis com os elementos
-			foreach ($publicaElementos as $chave => $outCaminho) {
-				foreach ($journalID->xpath($outCaminho) as ${"pub" . $chave}) {
+			foreach ($jsonInput['group'] as $nivel1) {
+				foreach ($nivel1['work-summary'] as $nivel2) {
+					if($i==$pubLimit) break;
+					array_push($pubIDs, $nivel2['put-code']);
+					$i++;
 				}
 			}
-			
-			// Chamar a função para obter nome do local de publicação e URL
-			foreach ($journalID->xpath("./work:title/common:title") as $callJournalName) {
-				$dadosJournal = fetchJournalName_URL($orcidID, $pubID);
-			}
-
-			// Output
-			echo "<div class='publica'><strong>" . $pubNome . "</strong>";
-			echo "<p>" . $dadosJournal["nome"] . "</p>";
-			echo "<p><strong>Data de Publicação: </strong>" . $pubData . "</p>";
-			echo "<p><strong>Tipo de Publicação: </strong>" . $pubTipo . "</p>";
-			echo "<p><strong>URL: </strong><a href='" . $dadosJournal["url"] . "'>" . $dadosJournal["url"] . "</a><hr /></div>";
-		}
+				// Chamar a função para obter Publicações
+				$dadosJournal = fetchJournalName_URL($orcidID, $pubIDs, $pubLimit);
 	}
 }
 
 
-function fetchJournalName_URL(&$orcidID, &$pubID) {
-	$urlPubName = "https://pub.orcid.org/v2.0/" . $orcidID . "/works/" . $pubID;
-	$caminho = "//bulk:bulk/work:work";
+function fetchJournalName_URL(&$orcidID, &$pubIDs, &$pubLimit) {
 
-	$curlXML = curl_init("$urlPubName");
-	curl_setopt($curlXML, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($curlXML, CURLOPT_HEADER, false);
-    curl_setopt($curlXML, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($curlXML, CURLOPT_RETURNTRANSFER, TRUE);
-    $output = curl_exec($curlXML);
-    curl_close($curlXML);
+		$i = 0;
+		$varNum = 1;
+		foreach ($pubIDs as $pubID) {
+			$i++;
+			if ($i == 1) {
+				${'array' . $varNum} = [];
+			} elseif ($i == 50) {
+				$varNum++;
+				${'array' . $varNum} = [];
+				$i = 0;
+			}
+			array_push(${'array' . $varNum}, $pubID);
+		}
 
-    $journalProfile = new SimpleXMLElement($output);
+	for ($i=1; $i <= $varNum ; $i++) { 
+	$str = implode (",", ${'array' . $i});
+	$urlPubName = 'https://pub.orcid.org/v2.0/' . $orcidID . '/works/' . $str;
 
-	foreach ($journalProfile->xpath($caminho . "/work:journal-title") as $journalFetchNome) {
+	$ch = curl_init($urlPubName);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array ('Accept: application/json'));
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    $jsonInput = json_decode($output, true);
+
+    foreach ($jsonInput['bulk'] as $nivel1) {
+	 foreach ($nivel1['work']['title']['title'] as $tituloPub) {
+	 	$journalFetchTitulo = $tituloPub;
+	 	echo '<div><strong>' . $journalFetchTitulo . '</strong>';
 	}
-	foreach ($journalProfile->xpath($caminho . "/work:url") as $journalFetchURL) {
+	
+	if (!is_null($nivel1['work']['journal-title'])) { 
+	foreach ($nivel1['work']['journal-title'] as $tituloJour) {
+		$journalFetchNome = $tituloJour;
+		echo '<p>' . $journalFetchNome . '</p>';
 	}
-	$out["nome"] = $journalFetchNome;
-	$out["url"] = $journalFetchURL;
-	return $out;
+	} else {
+	}
+
+	if (!is_null($nivel1['work']['publication-date'])) {
+		if (!is_null($nivel1['work']['publication-date']['year'])) {
+			foreach ($nivel1['work']['publication-date']['year'] as $pubData) {
+				$journalFetchData = $pubData;
+				echo '<p><strong>Data de Publicação: </strong>' . $journalFetchData . '</p>';
+			}
+		} else {
+		}
+	} else {
+	}
+
+	$journalFetchTipo = $nivel1['work']['type'];
+	$journalTipoUnder = str_replace('_', ' ', $journalFetchTipo);
+	$journalTipoCapital = ucwords(strtolower($journalTipoUnder));
+	echo '<p><strong>Tipo de Publicação: </strong>' . $journalTipoCapital . '</p>';
+
+
+	if (!is_null($nivel1['work']['url'])) {
+	foreach ($nivel1['work']['url'] as $pubURL) {
+		$journalFetchURL = $pubURL;
+		echo '<p><strong>URL: </strong><a href="' . $journalFetchURL . '">' . $journalFetchURL . '</a><hr /></div>';
+	}
+	} else {
+		echo '<hr /></div>';
+	}
+	}
+	}
 }

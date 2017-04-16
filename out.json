@@ -1,0 +1,184 @@
+{
+  "bulk": [
+    {
+      "work": {
+        "created-date": {
+          "value": 1441665980149
+        },
+        "last-modified-date": {
+          "value": 1489102119058
+        },
+        "source": {
+          "source-orcid": null,
+          "source-client-id": {
+            "uri": "http://orcid.org/client/0000-0002-5982-8983",
+            "path": "0000-0002-5982-8983",
+            "host": "orcid.org"
+          },
+          "source-name": {
+            "value": "Scopus to ORCID"
+          }
+        },
+        "put-code": 18321103,
+        "path": null,
+        "title": {
+          "title": {
+            "value": "Guest editorial FPL 2013"
+          },
+          "subtitle": null,
+          "translated-title": null
+        },
+        "journal-title": {
+          "value": "ACM Transactions on Reconfigurable Technology and Systems"
+        },
+        "short-description": null,
+        "citation": {
+          "citation-type": "BIBTEX",
+          "citation-value": "@article { cardoso2015,title = {Guest editorial FPL 2013},journal = {ACM Transactions on Reconfigurable Technology and Systems},year = {2015},volume = {8},number = {2},author = {Cardoso, J.M.P. and Diniz, P.C. and Morrow, K.}}"
+        },
+        "type": "JOURNAL_ARTICLE",
+        "publication-date": {
+          "year": {
+            "value": "2015"
+          },
+          "month": null,
+          "day": null,
+          "media-type": null
+        },
+        "external-ids": {
+          "external-id": [
+            {
+              "external-id-type": "doi",
+              "external-id-value": "10.1145/2737805",
+              "external-id-url": null,
+              "external-id-relationship": "SELF"
+            },
+            {
+              "external-id-type": "eid",
+              "external-id-value": "2-s2.0-84929178744",
+              "external-id-url": null,
+              "external-id-relationship": "SELF"
+            }
+          ]
+        },
+        "url": {
+          "value": "http://www.scopus.com/inward/record.url?eid=2-s2.0-84929178744&partnerID=MN8TOARS"
+        },
+        "contributors": {
+          "contributor": [
+            {
+              "contributor-orcid": null,
+              "credit-name": {
+                "value": "Cardoso, J.M.P."
+              },
+              "contributor-email": null,
+              "contributor-attributes": null
+            },
+            {
+              "contributor-orcid": null,
+              "credit-name": {
+                "value": "Diniz, P.C."
+              },
+              "contributor-email": null,
+              "contributor-attributes": null
+            },
+            {
+              "contributor-orcid": null,
+              "credit-name": {
+                "value": "Morrow, K."
+              },
+              "contributor-email": null,
+              "contributor-attributes": null
+            }
+          ]
+        },
+        "language-code": null,
+        "country": null,
+        "visibility": "PUBLIC"
+      }
+    },
+    {
+      "work": {
+        "created-date": {
+          "value": 1441665980194
+        },
+        "last-modified-date": {
+          "value": 1489102119058
+        },
+        "source": {
+          "source-orcid": null,
+          "source-client-id": {
+            "uri": "http://orcid.org/client/0000-0002-5982-8983",
+            "path": "0000-0002-5982-8983",
+            "host": "orcid.org"
+          },
+          "source-name": {
+            "value": "Scopus to ORCID"
+          }
+        },
+        "put-code": 18321110,
+        "path": null,
+        "title": {
+          "title": {
+            "value": "Coarse/fine-grained approaches for pipelining computing stages in fpga-based multicore architectures"
+          },
+          "subtitle": null,
+          "translated-title": null
+        },
+        "journal-title": {
+          "value": "Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)"
+        },
+        "short-description": null,
+        "citation": {
+          "citation-type": "BIBTEX",
+          "citation-value": "@article { cardoso2014,title = {Coarse/fine-grained approaches for pipelining computing stages in fpga-based multicore architectures},journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},year = {2014},volume = {8806},pages = {266-278},author = {Azarian, A. and Cardoso, J.M.P.}}"
+        },
+        "type": "BOOK",
+        "publication-date": {
+          "year": {
+            "value": "2014"
+          },
+          "month": null,
+          "day": null,
+          "media-type": null
+        },
+        "external-ids": {
+          "external-id": [
+            {
+              "external-id-type": "eid",
+              "external-id-value": "2-s2.0-84920080728",
+              "external-id-url": null,
+              "external-id-relationship": "SELF"
+            }
+          ]
+        },
+        "url": {
+          "value": "http://www.scopus.com/inward/record.url?eid=2-s2.0-84920080728&partnerID=MN8TOARS"
+        },
+        "contributors": {
+          "contributor": [
+            {
+              "contributor-orcid": null,
+              "credit-name": {
+                "value": "Azarian, A."
+              },
+              "contributor-email": null,
+              "contributor-attributes": null
+            },
+            {
+              "contributor-orcid": null,
+              "credit-name": {
+                "value": "Cardoso, J.M.P."
+              },
+              "contributor-email": null,
+              "contributor-attributes": null
+            }
+          ]
+        },
+        "language-code": null,
+        "country": null,
+        "visibility": "PUBLIC"
+      }
+    }
+  ]
+}
