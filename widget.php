@@ -5,7 +5,7 @@ Plugin Name: ORCiD Widget
 Plugin URI: 
 Description: Displays an ORCiD profile info
 Author: Henrique Diogo Silva
-Version: 0.5
+Version: 0.9
 Author URI: https://hdiogosilva.xyz
 */
 
@@ -63,7 +63,7 @@ class ORCiD_Widget extends WP_Widget {
 	     array_push($elementos, 'publica');
 	   }
 
-	   include "main.php";
+	   include "wp-orcid.php";
 	   foreach ($elementos as $elemento) {
 	   	fetch($orcidID, $elemento, $pubLimit);
 	   }
@@ -101,31 +101,37 @@ class ORCiD_Widget extends WP_Widget {
 
 		<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Título do Widget', 'text_domain' ); ?></label>
+		</p>
+		<p>
 		<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
-
+		
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'idOrcid' ) ); ?>"><?php _e( 'ORCiD ID', 'text_domain' ); ?></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'idOrcid' ) ); ?>"><strong><?php _e( 'ORCiD ID', 'text_domain' ); ?></strong></label>
+		</p>
+		<p>
 		<input id="<?php echo esc_attr( $this->get_field_id( 'idOrcid' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'idOrcid' ) ); ?>" type="text" value="<?php echo esc_attr( $idOrcid ); ?>" />
 		</p>
 
-		<p>Elementos a mostrar:</p>
+		<p><strong>Elementos a mostrar:</strong></p>
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxNome' ) ); ?>"><?php _e( 'Nome', 'text_domain' ); ?></label>
 		<input id="<?php echo esc_attr( $this->get_field_id( 'checkboxNome' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'checkboxNome' ) ); ?>" type="checkbox" value="1" <?php checked( '1', $checkboxNome ); ?>> </input>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxNome' ) ); ?>"><?php _e( 'Nome', 'text_domain' ); ?></label>
 		</p>
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxBio' ) ); ?>"><?php _e( 'Biografia', 'text_domain' ); ?></label>
 		<input id="<?php echo esc_attr( $this->get_field_id( 'checkboxBio' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'checkboxBio' ) ); ?>" type="checkbox" value="1" <?php checked( '1', $checkboxBio ); ?>> </input>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxBio' ) ); ?>"><?php _e( 'Biografia', 'text_domain' ); ?></label>
 		</p>
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxPublica' ) ); ?>"><?php _e( 'Lista de Publicações', 'text_domain' ); ?></label>
 		<input id="<?php echo esc_attr( $this->get_field_id( 'checkboxPublica' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'checkboxPublica' ) ); ?>" type="checkbox" value="1" <?php checked( '1', $checkboxPublica ); ?>> </input>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'checkboxPublica' ) ); ?>"><?php _e( 'Lista de Publicações', 'text_domain' ); ?></label>
 		</p>
 
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'numPub' ) ); ?>"><?php _e( 'Nº de publicações a apresentar', 'text_domain' ); ?></label>
-		<input id="<?php echo esc_attr( $this->get_field_id( 'numPub' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'numPub' ) ); ?>" type="text" value="<?php echo esc_attr( $numPub ); ?>" />
+		<label for="<?php echo esc_attr( $this->get_field_id( 'numPub' ) ); ?>"><strong><?php _e( 'Nº de publicações a apresentar', 'text_domain' ); ?></strong></label>
+		</p>
+		<p>
+		<input id="<?php echo esc_attr( $this->get_field_id( 'numPub' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'numPub' ) ); ?>" type="text" value="<?php echo esc_attr( $numPub ); ?>" />	
 		</p>
 
 		<?php 
