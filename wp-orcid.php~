@@ -1,6 +1,0 @@
-#!/usr/bin/php
-<?php
-function import_from_orcid($orcid_id){
-}
-
-?>
